@@ -7,44 +7,43 @@ import java.util.List;
 public class IntCode {
 
     private final List<Integer> mem;
-    private int ptr;
+    private int addr;
 
     public IntCode(List<Integer> program) {
         this.mem = new ArrayList<>(program);
-        this.ptr = 0;
+        this.addr = 0;
     }
 
-    public void run() {
-        var opCode = OpCode.of(mem.get(ptr));
+    public List<Integer> run() {
+        while (notHalted()) {
+            step();
+        }
+
+        return new ArrayList<>(mem);
+    }
+
+    private void step() {
+        var opCode = OpCode.of(mem.get(addr));
+        var inOne = mem.get(mem.get(addr + 1));
+        var inTwo = mem.get(mem.get(addr + 2));
+        var out = mem.get(addr + 3);
 
         switch (opCode) {
             case ADD -> {
-                var arg1 = mem.get(mem.get(ptr + 1));
-                var arg2 = mem.get(mem.get(ptr + 2));
-                var arg3 = mem.get(ptr + 3);
-
-                mem.set(arg3, arg1 + arg2);
-                ptr += 4;
+                mem.set(out, inOne + inTwo);
+                addr += 4;
             }
             case MUL -> {
-                var arg1 = mem.get(mem.get(ptr + 1));
-                var arg2 = mem.get(mem.get(ptr + 2));
-                var arg3 = mem.get(ptr + 3);
-
-                mem.set(arg3, arg1 * arg2);
-                ptr += 4;
+                mem.set(out, inOne * inTwo);
+                addr += 4;
             }
             case HALT -> {
             }
         }
     }
 
-    public boolean halted() {
-        return ptr < 0 || ptr >= mem.size() || mem.get(ptr) == OpCode.HALT.code;
-    }
-
-    public int memZero() {
-        return mem.getFirst();
+    private boolean notHalted() {
+        return addr >= 0 && addr < mem.size() && mem.get(addr) != OpCode.HALT.code;
     }
 
     private enum OpCode {

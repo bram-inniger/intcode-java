@@ -21,8 +21,17 @@ public class Day02Test {
     @Test
     public void partOneActualTest() {
         var input = InputReader.asSingleInts("02");
-        input.set(1, 12);
-        input.set(2, 2);
-        assertEquals(2_894_520, Day02.partOne(input));
+        assertEquals(2_894_520, Day02.partOne(input, 12, 2));
+    }
+
+    @Test
+    public void partTwoSampleTest() {
+        // No sample values given
+    }
+
+    @Test
+    public void partTwoActualTest() {
+        var input = InputReader.asSingleInts("02");
+        assertEquals(9_342, Day02.partTwo(input));
     }
 }
