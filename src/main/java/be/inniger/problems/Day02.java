@@ -9,7 +9,7 @@ public class Day02 {
     private static final int DESIRED_OUTPUT = 19_690_720;
 
     public static int partOne(List<Integer> program) {
-        return new IntCode(program).run().getFirst();
+        return new IntCode(program, null, null).run().getFirst();
     }
 
     public static int partOne(List<Integer> program, int replaceOne, int replaceTwo) {
@@ -21,7 +21,7 @@ public class Day02 {
             for (int verb = 0; verb <= 99; verb++) {
                 var programCpy = overrideProgram(program, noun, verb);
 
-                var output = new IntCode(programCpy).run().getFirst();
+                var output = new IntCode(programCpy, null, null).run().getFirst();
 
                 if (output == DESIRED_OUTPUT) {
                     return 100 * noun + verb;
