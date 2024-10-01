@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day02Test {
 
+    private static final List<Integer> INPUT = InputReader.asSingleInts("02");
+
     @Test
     public void partOneSampleTest() {
         assertEquals(3_500, Day02.partOne(List.of(1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50)));
@@ -20,8 +22,7 @@ public class Day02Test {
 
     @Test
     public void partOneActualTest() {
-        var input = InputReader.asSingleInts("02");
-        assertEquals(2_894_520, Day02.partOne(input, 12, 2));
+        assertEquals(2_894_520, Day02.partOne(INPUT, 12, 2));
     }
 
     @Test
@@ -31,7 +32,6 @@ public class Day02Test {
 
     @Test
     public void partTwoActualTest() {
-        var input = InputReader.asSingleInts("02");
-        assertEquals(9_342, Day02.partTwo(input));
+        assertEquals(9_342, Day02.partTwo(INPUT));
     }
 }

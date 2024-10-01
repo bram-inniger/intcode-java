@@ -15,4 +15,13 @@ public class Day05 {
 
         return outputs.stream().filter(out -> out != 0).findFirst().orElseThrow();
     }
+
+    public static int partTwo(List<Integer> program, int input) {
+        var inputs = new ArrayDeque<>(List.of(input));
+        var outputs = new ArrayDeque<Integer>();
+
+        new IntCode(program, inputs, outputs).run();
+
+        return outputs.getFirst();
+    }
 }
