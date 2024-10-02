@@ -17,7 +17,11 @@ public class Day07 {
     }
 
     private static long bothParts(List<Long> program, List<Long> phasesElements) {
-        return Util.permutations(phasesElements).stream().mapToLong(phases -> amplify(program, phases)).max().orElseThrow();
+        return Util.permutations(phasesElements)
+                .stream()
+                .mapToLong(phases -> amplify(program, phases))
+                .max()
+                .orElseThrow();
     }
 
     private static long amplify(List<Long> program, List<Long> phases) {
