@@ -28,6 +28,14 @@ public class IntCode {
         return new ArrayList<>(mem);
     }
 
+    public Queue<Integer> input() {
+        return inputs;
+    }
+
+    public Queue<Integer> output() {
+        return outputs;
+    }
+
     private void step() {
         var opCode = OpCode.of(mem.get(ipr) % 100);
         var params = params(opCode);
@@ -68,8 +76,6 @@ public class IntCode {
                 // No-op
             }
         }
-
-        // 3,9,8,9,10,9,4,9,99,-1,8
 
         if (shouldIncrement) {
             ipr += opCode.increment;
