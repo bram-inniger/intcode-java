@@ -2,26 +2,23 @@ package be.inniger.problems;
 
 import be.inniger.IntCode;
 
-import java.util.ArrayDeque;
 import java.util.List;
 
 public class Day05 {
 
     public static int partOne(List<Integer> program) {
-        var inputs = new ArrayDeque<>(List.of(1));
-        var outputs = new ArrayDeque<Integer>();
+        var intCode = new IntCode(program);
+        intCode.input().add(1);
+        intCode.run();
 
-        new IntCode(program, inputs, outputs).run();
-
-        return outputs.stream().filter(out -> out != 0).findFirst().orElseThrow();
+        return intCode.output().stream().filter(out -> out != 0).findFirst().orElseThrow();
     }
 
     public static int partTwo(List<Integer> program, int input) {
-        var inputs = new ArrayDeque<>(List.of(input));
-        var outputs = new ArrayDeque<Integer>();
+        var intCode = new IntCode(program);
+        intCode.input().add(input);
+        intCode.run();
 
-        new IntCode(program, inputs, outputs).run();
-
-        return outputs.getFirst();
+        return intCode.output().remove();
     }
 }

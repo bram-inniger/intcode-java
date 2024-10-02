@@ -1,42 +1,53 @@
 package be.inniger.problems;
 
 import be.inniger.IntCode;
+import be.inniger.IntCode.Status;
 import be.inniger.Util;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Day07 {
 
     public static int partOne(List<Integer> program) {
-        return Util.permutations(List.of(0, 1, 2, 3, 4))
-                .stream()
-                .mapToInt(phases -> amplify(program, phases))
-                .max()
-                .orElseThrow();
+        return bothParts(program, List.of(0, 1, 2, 3, 4));
+    }
+
+    public static int partTwo(List<Integer> program) {
+        return bothParts(program, List.of(5, 6, 7, 8, 9));
+    }
+
+    private static int bothParts(List<Integer> program, List<Integer> phasesElements) {
+        return Util.permutations(phasesElements).stream().mapToInt(phases -> amplify(program, phases)).max().orElseThrow();
     }
 
     private static int amplify(List<Integer> program, List<Integer> phases) {
-        var dummyOutput = new ArrayDeque<Integer>();
-        var intCodes = new ArrayList<IntCode>();
+        // Create IntCode computers, with the phase as their first input
+        var intCodes = phases.stream().map(phase -> phasedIntCode(program, phase)).toList();
 
-        Queue<Integer> prevOutput = dummyOutput;
-        for (int phase : phases) {
-            var output = new ArrayDeque<Integer>();
-            var intCode = new IntCode(program, prevOutput, output);
-
-            intCode.input().add(phase);
-            prevOutput = intCode.output();
-
-            intCodes.add(intCode);
+        // Wire the output of one to the input of the next, circular
+        for (int i = 0; i < intCodes.size(); i++) {
+            var intCode = intCodes.get(i);
+            intCode.wireOutput(intCodes.get((i + 1) % intCodes.size()).input());
         }
 
-        dummyOutput.add(0);
+        // Additionally, once, give the value 0 as input to the first computer
+        intCodes.getFirst().input().add(0);
 
-        intCodes.forEach(IntCode::run);
+        // Keep running the computers until the last one has halted
+        var status = Status.RUNNING;
+        while (status != Status.HALTED) {
+            for (var intCode : intCodes) {
+                status = intCode.run();
+            }
+        }
 
-        return prevOutput.remove();
+        // Last computer's last output is the final result
+        return intCodes.getLast().output().remove();
+    }
+
+    private static IntCode phasedIntCode(List<Integer> program, Integer phase) {
+        var intCode = new IntCode(program);
+        intCode.input().add(phase);
+        return intCode;
     }
 }
