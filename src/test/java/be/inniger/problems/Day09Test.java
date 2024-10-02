@@ -30,4 +30,14 @@ public class Day09Test {
     public void partOneActualTest() {
         assertEquals(3_780_860_499L, Day09.partOne(INPUT));
     }
+
+    @Test
+    public void partTwoSampleTest() {
+        // No sample values given
+    }
+
+    @Test
+    public void partTwoActualTest() {
+        assertEquals(33_343, Day09.partTwo(INPUT));
+    }
 }
