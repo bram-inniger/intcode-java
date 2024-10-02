@@ -6,15 +6,15 @@ import java.util.List;
 
 public class Day05 {
 
-    public static int partOne(List<Integer> program) {
+    public static long partOne(List<Long> program) {
         var intCode = new IntCode(program);
-        intCode.input().add(1);
+        intCode.input().add(1L);
         intCode.run();
 
         return intCode.output().stream().filter(out -> out != 0).findFirst().orElseThrow();
     }
 
-    public static int partTwo(List<Integer> program, int input) {
+    public static long partTwo(List<Long> program, long input) {
         var intCode = new IntCode(program);
         intCode.input().add(input);
         intCode.run();

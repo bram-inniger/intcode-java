@@ -1,21 +1,23 @@
 package be.inniger;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class IntCode {
 
-    private final List<Integer> mem;
-    private Queue<Integer> inputs;
-    private Queue<Integer> outputs;
+    private final Map<Long, Long> mem;
 
-    private int ipr;
+    private Queue<Long> inputs;
+    private Queue<Long> outputs;
+    private long ipr;
 
-    public IntCode(List<Integer> program) {
-        this.mem = new ArrayList<>(program);
+    public IntCode(List<Long> program) {
+        this.mem = IntStream.range(0, program.size()).boxed().collect(Collectors.toMap(i -> (long) i, program::get));
         this.inputs = new ArrayDeque<>();
         this.outputs = new ArrayDeque<>();
         this.ipr = 0;
@@ -31,25 +33,21 @@ public class IntCode {
         return status;
     }
 
-    public Queue<Integer> input() {
+    public Queue<Long> input() {
         return inputs;
     }
 
-    public Queue<Integer> output() {
+    public Queue<Long> output() {
         return outputs;
     }
 
     @SuppressWarnings("unused") // Here to mirror the equivalent output method
-    public void wireInput(Queue<Integer> inputs) {
+    public void wireInput(Queue<Long> inputs) {
         this.inputs = inputs;
     }
 
-    public void wireOutput(Queue<Integer> outputs) {
+    public void wireOutput(Queue<Long> outputs) {
         this.outputs = outputs;
-    }
-
-    public List<Integer> memory() {
-        return new ArrayList<>(mem);
     }
 
     private Status step() {
@@ -58,15 +56,15 @@ public class IntCode {
         var shouldIncrement = true;
 
         switch (opCode) {
-            case ADD -> mem.set(params.get(2), params.get(0) + params.get(1));
-            case MULTIPLY -> mem.set(params.get(2), params.get(0) * params.get(1));
+            case ADD -> mem.put(params.get(2), params.get(0) + params.get(1));
+            case MULTIPLY -> mem.put(params.get(2), params.get(0) * params.get(1));
             case INPUT -> {
                 if (inputs.isEmpty()) {
                     return Status.INPUT_BLOCKED;
                 }
 
                 var input = inputs.remove();
-                mem.set(params.getFirst(), input);
+                mem.put(params.getFirst(), input);
             }
             case OUTPUT -> {
                 var output = params.getFirst();
@@ -84,8 +82,8 @@ public class IntCode {
                     shouldIncrement = false;
                 }
             }
-            case LESS_THAN -> mem.set(params.get(2), params.get(0) < params.get(1) ? 1 : 0);
-            case EQUALS -> mem.set(params.get(2), (int) params.get(0) == params.get(1) ? 1 : 0);
+            case LESS_THAN -> mem.put(params.get(2), params.get(0) < params.get(1) ? 1L : 0L);
+            case EQUALS -> mem.put(params.get(2), params.get(0).equals(params.get(1)) ? 1L : 0L);
             case HALT -> {
                 return Status.HALTED;
             }
@@ -98,7 +96,7 @@ public class IntCode {
         return Status.RUNNING;
     }
 
-    private List<Integer> params(OpCode opCode) {
+    private List<Long> params(OpCode opCode) {
         var modes = mem.get(ipr) / 100;
 
         return switch (opCode) {
@@ -117,18 +115,28 @@ public class IntCode {
     }
 
     private enum OpCode {
-        ADD(1, 4), MULTIPLY(2, 4), INPUT(3, 2), OUTPUT(4, 2), JUMP_IF_TRUE(5, 3), JUMP_IF_FALSE(6, 3), LESS_THAN(7, 4), EQUALS(8, 4), HALT(99, 0),
+        //@formatter:off
+        ADD(1, 4),
+        MULTIPLY(2, 4),
+        INPUT(3, 2),
+        OUTPUT(4, 2),
+        JUMP_IF_TRUE(5, 3),
+        JUMP_IF_FALSE(6, 3),
+        LESS_THAN(7, 4),
+        EQUALS(8, 4),
+        HALT(99, 0),
         ;
+        //@formatter:on
 
-        private final int code;
-        private final int increment;
+        private final long code;
+        private final long increment;
 
-        OpCode(int code, int increment) {
+        OpCode(long code, long increment) {
             this.code = code;
             this.increment = increment;
         }
 
-        private static OpCode of(int code) {
+        private static OpCode of(long code) {
             return Arrays.stream(OpCode.values()).filter(opCode -> opCode.code == code).findFirst().orElseThrow();
         }
     }
