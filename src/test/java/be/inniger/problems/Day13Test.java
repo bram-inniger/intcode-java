@@ -3,6 +3,7 @@ package be.inniger.problems;
 import be.inniger.problems.util.InputReader;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +19,16 @@ public class Day13Test {
 
     @Test
     public void partOneActualTest() {
-        assertEquals(273, Day13.partOne(INPUT));
+        assertEquals(273, Day13.partOne(new ArrayList<>(INPUT)));
+    }
+
+    @Test
+    public void partTwoSampleTest() {
+        // No sample values given
+    }
+
+    @Test
+    public void partTwoActualTest() {
+        assertEquals(13_140, Day13.partTwo(new ArrayList<>(INPUT)));
     }
 }
