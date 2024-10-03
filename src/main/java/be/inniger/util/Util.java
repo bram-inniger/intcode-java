@@ -1,4 +1,4 @@
-package be.inniger;
+package be.inniger.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;

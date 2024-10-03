@@ -2,7 +2,7 @@ package be.inniger.problems;
 
 import be.inniger.IntCode;
 import be.inniger.IntCode.Status;
-import be.inniger.Util;
+import be.inniger.util.Util;
 
 import java.util.List;
 
