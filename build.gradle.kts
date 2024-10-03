@@ -7,7 +7,7 @@ group = "be.inniger"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass = "be.inniger.problems.Day13\$Main"
+    mainClass = "be.inniger.intcode.problems.Day13\$Main"
 }
 
 repositories {

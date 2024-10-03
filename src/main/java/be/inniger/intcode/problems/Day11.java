@@ -1,8 +1,6 @@
-package be.inniger.problems;
+package be.inniger.intcode.problems;
 
-import be.inniger.IntCode;
-import be.inniger.util.Coordinate;
-import be.inniger.util.Direction;
+import be.inniger.intcode.IntCode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +36,46 @@ public class Day11 {
                         .mapToObj(x -> whitePanels.contains(new Coordinate(x, y)) ? "#" : " ")
                         .collect(Collectors.joining()))
                 .collect(Collectors.joining("\n"));
+    }
+
+    public enum Direction {
+        //@formatter:off
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST,
+        ;
+        //@formatter:on
+
+        public Direction turnLeft() {
+            return switch (this) {
+                case NORTH -> Direction.WEST;
+                case EAST -> Direction.NORTH;
+                case SOUTH -> Direction.EAST;
+                case WEST -> Direction.SOUTH;
+            };
+        }
+
+        public Direction turnRight() {
+            return switch (this) {
+                case NORTH -> Direction.EAST;
+                case EAST -> Direction.SOUTH;
+                case SOUTH -> Direction.WEST;
+                case WEST -> Direction.NORTH;
+            };
+        }
+    }
+
+    public record Coordinate(long x, long y) {
+
+        public Coordinate move(Day11.Direction direction) {
+            return switch (direction) {
+                case NORTH -> new Coordinate(this.x, this.y - 1);
+                case EAST -> new Coordinate(this.x + 1, this.y);
+                case SOUTH -> new Coordinate(this.x, this.y + 1);
+                case WEST -> new Coordinate(this.x - 1, this.y);
+            };
+        }
     }
 
     private static class Hull {

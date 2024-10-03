@@ -1,6 +1,6 @@
-package be.inniger.problems;
+package be.inniger.intcode.problems;
 
-import be.inniger.problems.util.InputReader;
+import be.inniger.intcode.TestUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day11Test {
 
-    private static final List<Long> INPUT = InputReader.readProgram("11");
+    private static final List<Long> INPUT = TestUtil.readProgram("11");
 
     @Test
     public void partOneSampleTest() {

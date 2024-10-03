@@ -1,4 +1,4 @@
-package be.inniger;
+package be.inniger.intcode;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;

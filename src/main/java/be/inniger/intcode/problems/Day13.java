@@ -1,7 +1,6 @@
-package be.inniger.problems;
+package be.inniger.intcode.problems;
 
-import be.inniger.IntCode;
-import be.inniger.util.Coordinate;
+import be.inniger.intcode.IntCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -174,6 +173,9 @@ public class Day13 {
             AUTOMATIC,
             MANUAL,
             //@formatter:on
+        }
+
+        public record Coordinate(long x, long y) {
         }
     }
 

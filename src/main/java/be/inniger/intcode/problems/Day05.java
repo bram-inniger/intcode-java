@@ -1,6 +1,6 @@
-package be.inniger.problems;
+package be.inniger.intcode.problems;
 
-import be.inniger.IntCode;
+import be.inniger.intcode.IntCode;
 
 import java.util.List;
 

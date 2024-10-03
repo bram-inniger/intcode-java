@@ -1,18 +1,18 @@
-package be.inniger.problems;
+package be.inniger.intcode.problems;
 
-import be.inniger.problems.util.InputReader;
+import be.inniger.intcode.TestUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static be.inniger.problems.util.Util.asLong;
+import static be.inniger.intcode.TestUtil.asLong;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Day09Test {
 
-    private static final List<Long> INPUT = InputReader.readProgram("09");
+    private static final List<Long> INPUT = TestUtil.readProgram("09");
 
     @Test
     public void partOneSampleTest() {
