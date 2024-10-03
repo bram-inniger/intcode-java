@@ -20,4 +20,22 @@ public class Day11Test {
     public void partOneActualTest() {
         assertEquals(2_211, Day11.partOne(INPUT));
     }
+
+    @Test
+    public void partTwoSampleTest() {
+        // No sample values given
+    }
+
+    @Test
+    public void partTwoActualTest() {
+        var expected = """
+                #### ####  ##  #  # #  # ####  ##   ##\s
+                #    #    #  # # #  #  # #    #  # #  #
+                ###  ###  #    ##   #  # ###  #    #  \s
+                #    #    #    # #  #  # #    # ## #  \s
+                #    #    #  # # #  #  # #    #  # #  #
+                #### #     ##  #  #  ##  ####  ###  ##\s""";
+
+        assertEquals(expected, Day11.partTwo(INPUT));
+    }
 }
