@@ -19,6 +19,10 @@ public class Day15 {
         return Area.map(new Droid(program)).findOxygen();
     }
 
+    public static long partTwo(List<Long> program) {
+        return Area.map(new Droid(program)).fillOxygen();
+    }
+
     private enum Movement {
         //@formatter:off
         NORTH(1),
@@ -116,11 +120,6 @@ public class Day15 {
             while (!toVisit.isEmpty()) {
                 var current = toVisit.removeFirst();
 
-                // Already visited this note, continue
-                if (visited.contains(current.coordinate)) {
-                    continue;
-                }
-
                 // Found the destination, return
                 if (current.coordinate.equals(destination)) {
                     return current.distance;
@@ -129,6 +128,7 @@ public class Day15 {
                 visited.add(current.coordinate);
                 Arrays.stream(Movement.values())
                         .map(current.coordinate::move)
+                        .filter(coordinate -> !visited.contains(coordinate))
                         .filter(coordinate -> {
                             var tile = tiles.getOrDefault(coordinate, Tile.UNKNOWN);
                             return tile == Tile.EMPTY || tile == Tile.OXYGEN_SYSTEM;
@@ -137,6 +137,39 @@ public class Day15 {
             }
 
             throw new IllegalArgumentException("Destination cannot be reached from source");
+        }
+
+        // BFS approach to find the shortest route
+        public long fillOxygen() {
+            var source = tiles.entrySet()
+                    .stream()
+                    .filter(e -> e.getValue() == Tile.OXYGEN_SYSTEM)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElseThrow();
+            var visited = new HashSet<Coordinate>();
+            var toVisit = new ArrayDeque<Node>();
+            toVisit.addLast(new Node(source, 0));
+
+            while (!toVisit.isEmpty()) {
+                var current = toVisit.removeFirst();
+
+                visited.add(current.coordinate);
+                Arrays.stream(Movement.values())
+                        .map(current.coordinate::move)
+                        .filter(coordinate -> !visited.contains(coordinate))
+                        .filter(coordinate -> {
+                            var tile = tiles.getOrDefault(coordinate, Tile.UNKNOWN);
+                            return tile == Tile.EMPTY || tile == Tile.OXYGEN_SYSTEM;
+                        })
+                        .forEach(coordinate -> toVisit.addLast(new Node(coordinate, current.distance + 1)));
+
+                if (toVisit.isEmpty()) {
+                    return current.distance;
+                }
+            }
+
+            throw new IllegalStateException("Unreachable");
         }
 
         // DFS approach to map the whole maze
