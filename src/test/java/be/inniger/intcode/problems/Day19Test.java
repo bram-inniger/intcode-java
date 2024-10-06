@@ -20,4 +20,14 @@ public class Day19Test {
     public void partOneActualTest() {
         assertEquals(203, Day19.partOne(INPUT));
     }
+
+    @Test
+    public void partTwoSampleTest() {
+        // No sample values given
+    }
+
+    @Test
+    public void partTwoActualTest() {
+        assertEquals(8_771_057, Day19.partTwo(INPUT));
+    }
 }
