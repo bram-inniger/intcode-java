@@ -39,13 +39,11 @@ public class Day11 {
     }
 
     public enum Direction {
-        //@formatter:off
         NORTH,
         EAST,
         SOUTH,
         WEST,
         ;
-        //@formatter:on
 
         public Direction turnLeft() {
             return switch (this) {

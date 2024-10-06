@@ -158,15 +158,12 @@ public class IntCode {
     }
 
     public enum Status {
-        //@formatter:off
         RUNNING,
         INPUT_BLOCKED,
         HALTED,
-        //@formatter:on
     }
 
     private enum OpCode {
-        //@formatter:off
         ADD(1, 4),
         MULTIPLY(2, 4),
         INPUT(3, 2),
@@ -178,7 +175,6 @@ public class IntCode {
         ADJUST_BASE(9, 2),
         HALT(99, 0),
         ;
-        //@formatter:on
 
         private final long code;
         private final long increment;
@@ -194,12 +190,10 @@ public class IntCode {
     }
 
     private enum Mode {
-        //@formatter:off
         POSITION(0),
         IMMEDIATE(1),
         RELATIVE(2),
         ;
-        //@formatter:on
 
         private final long mode;
 

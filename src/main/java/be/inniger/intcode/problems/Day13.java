@@ -131,14 +131,12 @@ public class Day13 {
         }
 
         private enum Tile {
-            //@formatter:off
             EMPTY(0, " "),
             WALL(1, "#"),
             BLOCK(2, "■"),
             PADDLE(3, "_"),
             BALL(4, "o"),
             ;
-            //@formatter:on
 
             private final long id;
             private final String display;
@@ -154,12 +152,10 @@ public class Day13 {
         }
 
         private enum JoyStick {
-            //@formatter:off
             NEUTRAL(0),
             LEFT(-1),
             RIGHT(1),
             ;
-            //@formatter:on
 
             private final long value;
 
@@ -169,10 +165,8 @@ public class Day13 {
         }
 
         private enum Mode {
-            //@formatter:off
             AUTOMATIC,
             MANUAL,
-            //@formatter:on
         }
 
         public record Coordinate(long x, long y) {

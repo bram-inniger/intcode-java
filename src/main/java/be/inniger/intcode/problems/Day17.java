@@ -169,13 +169,11 @@ public class Day17 {
         }
 
         private enum Direction {
-            //@formatter:off
             UP('^'),
             RIGHT('>'),
             DOWN('v'),
             LEFT('<'),
             ;
-            //@formatter:on
 
             private final char print;
 

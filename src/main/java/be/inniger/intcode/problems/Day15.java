@@ -24,13 +24,11 @@ public class Day15 {
     }
 
     private enum Movement {
-        //@formatter:off
         NORTH(1),
         SOUTH(2),
         WEST(3),
         EAST(4),
         ;
-        //@formatter:on
 
         private final long code;
 
@@ -49,12 +47,10 @@ public class Day15 {
     }
 
     private enum Status {
-        //@formatter:off
         WALL(0),
         MOVED(1),
         DEST(2),
         ;
-        //@formatter:on
 
         private final long code;
 
@@ -68,13 +64,11 @@ public class Day15 {
     }
 
     private enum Tile {
-        //@formatter:off
         WALL("#"),
         EMPTY("."),
         OXYGEN_SYSTEM("O"),
         UNKNOWN(" "),
         ;
-        //@formatter:on
 
         private final String display;
 
