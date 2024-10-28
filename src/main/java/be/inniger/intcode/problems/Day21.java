@@ -19,17 +19,17 @@ public class Day21 {
         //
         // Which translates to the jumpscript
         //
-        //  OR  A T  -> T starts at false, so this stores the current value of A into T
-        //  AND B T  -> store "B AND T" in T -> "T = B AND A"
-        //  AND C T  -> store "C AND T" in T -> "T = C AND B AND A"
-        //  NOT T J  -> store the negation of T in J -> "J = NOT ( C AND B AND A )"
+        //  OR  A J  -> J starts at false, so this stores the current value of A into J
+        //  AND B J  -> store "B AND J" in J -> "J = B AND A"
+        //  AND C J  -> store "C AND J" in J -> "J = C AND B AND A"
+        //  NOT J J  -> store the negation of J in J -> "J = NOT ( C AND B AND A )"
         //  AND D J  -> store "D and J" in J -> "J = ( NOT ( C AND B AND A ) ) AND D"
         //  WALK     -> start the program
         var jumpScript = """
-                OR  A T
-                AND B T
-                AND C T
-                NOT T J
+                OR  A J
+                AND B J
+                AND C J
+                NOT J J
                 AND D J
                 WALK
                 """.chars().mapToLong(c -> (long) c).boxed().toList();
