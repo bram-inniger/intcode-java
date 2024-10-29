@@ -3,6 +3,7 @@ package be.inniger.intcode.problems;
 import be.inniger.intcode.IntCode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,7 +15,11 @@ import java.util.stream.LongStream;
 public class Day23 {
 
     public static long partOne(List<Long> program) {
-        return Network.of(50, program).runUntilAddressOutOfBounds().y;
+        return Network.of(50, program, true).runUntilAddressOutOfBounds().y;
+    }
+
+    public static long partTwo(List<Long> program) {
+        return Network.of(50, program, false).runUntilAddressOutOfBounds().y;
     }
 
     private record Packet(long address, long x, long y) {
@@ -63,6 +68,14 @@ public class Day23 {
             return address;
         }
 
+        public void receive(Packet packet) {
+            if (packet.address != address) {
+                throw new IllegalStateException("NIC received the wrong packet: " + packet);
+            }
+
+            packetQueue.add(packet);
+        }
+
         public Optional<Packet> send() {
             if (intCode.output().isEmpty()) {
                 return Optional.empty();
@@ -75,21 +88,43 @@ public class Day23 {
             return Optional.of(new Packet(address, x, y));
         }
 
-        public void receive(Packet packet) {
-            packetQueue.add(packet);
+        public boolean isIdle() {
+            return packetQueue.isEmpty();
         }
     }
 
-    private record Network(Map<Long, NIC> nics, Queue<Packet> packetQueue) {
+    private static class NAT {
 
-        public static Network of(long size, List<Long> program) {
+        private long x = -1;
+        private long y = -1;
+
+        public void receive(Packet packet) {
+            if (packet.address != 255) {
+                throw new IllegalStateException("NAT received the wrong packet: " + packet);
+            }
+
+            this.x = packet.x;
+            this.y = packet.y;
+        }
+
+        public Packet send() {
+            return new Packet(0, x, y);
+        }
+    }
+
+    private record Network(
+            Map<Long, NIC> nics,
+            Queue<Packet> packetQueue,
+            NAT nat,
+            boolean fastReturn,
+            List<Long> natDelivered
+    ) {
+
+        public static Network of(long size, List<Long> program, boolean fastReturn) {
             var nics = LongStream.range(0, size)
                     .mapToObj(address -> NIC.of(address, program))
-                    .collect(Collectors.toMap(
-                            NIC::getAddress,
-                            Function.identity()
-                    ));
-            return new Network(nics, new ArrayDeque<>());
+                    .collect(Collectors.toMap(NIC::getAddress, Function.identity()));
+            return new Network(nics, new ArrayDeque<>(), new NAT(), fastReturn, new ArrayList<>());
         }
 
         public Packet runUntilAddressOutOfBounds() {
@@ -101,16 +136,34 @@ public class Day23 {
                     }
                 }
 
+                // Check if the network is idle
+                var idle = packetQueue.isEmpty() && nics.values().stream().allMatch(NIC::isIdle);
+                if (idle) {
+                    var packet = nat.send();
+
+                    if (natDelivered.contains(packet.y)) {
+                        return packet;
+                    }
+
+                    natDelivered.add(packet.y);
+                    packetQueue.add(packet);
+                }
+
                 // Route packets to recipients
                 while (!packetQueue.isEmpty()) {
                     var packet = packetQueue.remove();
 
-                    if (!nics.containsKey(packet.address)) {
+                    if (packet.address == 255 && fastReturn) {
                         return packet;
                     }
-
-                    var nic = nics.get(packet.address);
-                    nic.receive(packet);
+                    if (packet.address == 255) {
+                        nat.receive(packet);
+                    } else if (!nics.containsKey(packet.address)) {
+                        throw new IllegalStateException("Cannot send packet to address " + packet.address);
+                    } else {
+                        var nic = nics.get(packet.address);
+                        nic.receive(packet);
+                    }
                 }
 
                 // Run all the NICs for the next iteration
